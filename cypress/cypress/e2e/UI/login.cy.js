@@ -1,12 +1,13 @@
-describe('saucedemo UI', async () => {
-    it('login', async () => {
-        // this is from the new device hehe :)
+import { loginPage } from '../../support/page'
 
-        //login
+describe('saucedemo UI', async () => {
+    it('e2e', async () => {
+        
+        //visit website
         await cy.visit('https://www.saucedemo.com');
-        await cy.xpath("//input[@data-test='username']").type('standard_user');
-        await cy.xpath("//input[@data-test='password']").type('secret_sauce');
-        await cy.xpath("//input[@data-test='login-button']").click();
+        
+        //login
+        await loginPage.loginValid();
         
         //add item 1 and 2 to cart
         await cy.xpath("(//button[contains(@data-test,'add-to-cart')])[1]").click();
