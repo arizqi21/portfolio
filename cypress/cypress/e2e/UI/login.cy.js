@@ -1,5 +1,7 @@
 describe('saucedemo UI', async () => {
     it('login', async () => {
+        // this is from the new device hehe :)
+
         //login
         await cy.visit('https://www.saucedemo.com');
         await cy.xpath("//input[@data-test='username']").type('standard_user');
