@@ -1,32 +1,87 @@
-import { loginPage, productsPage, cartPage, checkoutInfoPage, checkoutOverviewPage, checkoutCompletePage } from '../../support/page'
-import defaultCustomer from '../../support/data/customer-data.json'
+import { loginPage } from '../../support/page'
+import credential from '../../support/data/credential.json'
 
-describe('saucedemo UI', async () => {
-    it('e2e', async () => {
-        
-        //visit website
+describe('saucedemo UI - login', async () => {
+    it('login failed with invalid password', async () => {
         await cy.visit('https://www.saucedemo.com');
-        
-        //login
-        await loginPage.loginValid();
-        
-        //add item 1 and 2 to cart
-        await productsPage.addItemsToCart();
 
-        //checkout
-        await productsPage.goToCart();
-        await cartPage.proceedToCheckout();
+        await loginPage.login({
+            username: credential.username,
+            password: 'wrong_password',
+        });
 
-        //fill checkout information
-        await checkoutInfoPage.fillFirstName(defaultCustomer.firstName);
-        await checkoutInfoPage.fillLastName(defaultCustomer.lastName);
-        await checkoutInfoPage.fillPostalCode(defaultCustomer.postalCode);
-        await checkoutInfoPage.clickContinue();
+        // assert error message is shown
+        await cy.get('[data-test="error"]')
+            .should('be.visible')
+            .and('contain.text', 'Username and password do not match');
+    });
 
-        //finish transaction
-        await checkoutOverviewPage.finishCheckout();
+    it('login failed with invalid username', async () => {
+        await cy.visit('https://www.saucedemo.com');
 
-        //checkout complete
-        await checkoutCompletePage.backToProducts();
+        await loginPage.login({
+            username: 'wrong_user',
+            password: credential.password,
+        });
+
+        // assert error message is shown
+        await cy.get('[data-test="error"]')
+            .should('be.visible')
+            .and('contain.text', 'Username and password do not match');
+    });
+
+    it('login failed with empty username and password', async () => {
+        await cy.visit('https://www.saucedemo.com');
+
+        await loginPage.login({
+            username: '',
+            password: '',
+        });
+
+        // assert error message is shown
+        await cy.get('[data-test="error"]')
+            .should('be.visible')
+            .and('contain.text', 'Username is required');
+    });
+
+    it('login failed with only username filled', async () => {
+        await cy.visit('https://www.saucedemo.com');
+
+        await loginPage.login({
+            username: credential.username,
+            // password not sent at all
+        });
+
+        await cy.get('[data-test="error"]')
+            .should('be.visible')
+            .and('contain.text', 'Password is required');
+    });
+
+    it('login failed with only password filled', async () => {
+        await cy.visit('https://www.saucedemo.com');
+
+        await loginPage.login({
+            // username not sent at all
+            password: credential.password,
+        });
+
+        await cy.get('[data-test="error"]')
+            .should('be.visible')
+            .and('contain.text', 'Username is required');
+    });
+
+    it('login success', async () => {
+        // visit website
+        await cy.visit('https://www.saucedemo.com');
+
+        // login with valid credential
+        await loginPage.login({
+            username: credential.username,
+            password: credential.password,
+        });
+
+        // assert redirected to inventory page
+        await cy.url().should('include', '/inventory.html');
+        await cy.get('.inventory_list').should('be.visible');
     });
 });
