@@ -1,4 +1,5 @@
-import { loginPage } from '../../support/page'
+import { loginPage, productsPage, cartPage, checkoutInfoPage, checkoutOverviewPage, checkoutCompletePage } from '../../support/page'
+import defaultCustomer from '../../support/data/customer-data.json'
 
 describe('saucedemo UI', async () => {
     it('e2e', async () => {
@@ -10,25 +11,22 @@ describe('saucedemo UI', async () => {
         await loginPage.loginValid();
         
         //add item 1 and 2 to cart
-        await cy.xpath("(//button[contains(@data-test,'add-to-cart')])[1]").click();
-        await cy.xpath("(//button[contains(@data-test,'add-to-cart')])[2]").click();
+        await productsPage.addItemsToCart();
 
         //checkout
-        await cy.xpath("//a[@data-test='shopping-cart-link']").click();
-
-        //checkout
-        await cy.xpath("//button[@data-test='checkout']").click();
+        await productsPage.goToCart();
+        await cartPage.proceedToCheckout();
 
         //fill checkout information
-        await cy.xpath("//input[@data-test='firstName']").type('user');
-        await cy.xpath("//input[@data-test='lastName']").type('baru');
-        await cy.xpath("//input[@data-test='postalCode']").type('123321');
-        await cy.xpath("//input[@data-test='continue']").click();
+        await checkoutInfoPage.fillFirstName(defaultCustomer.firstName);
+        await checkoutInfoPage.fillLastName(defaultCustomer.lastName);
+        await checkoutInfoPage.fillPostalCode(defaultCustomer.postalCode);
+        await checkoutInfoPage.clickContinue();
 
         //finish transaction
-        await cy.xpath("//button[@data-test='finish']").click();
+        await checkoutOverviewPage.finishCheckout();
 
         //checkout complete
-        await cy.xpath("//button[@data-test='back-to-products']").click();
+        await checkoutCompletePage.backToProducts();
     });
 });
