@@ -6,5 +6,5 @@ cypress/package-lock.json
 
 n8n/audio
 n8n/output
-.SD_Store
-**/.SD_Store
+.DS_Store
+**/.DS_Store
