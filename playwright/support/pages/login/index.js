@@ -1,7 +1,7 @@
 // import {text, Page} from 'playwright/test';
 import pageObject from './page-object.json';
 
-class Action { 
+class LoginPage { 
     constructor(page){
         this.page = page
     }
@@ -17,4 +17,4 @@ class Action {
     }
 }
 
-export default Action;
+export default LoginPage;
