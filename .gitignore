@@ -4,6 +4,7 @@ cypress/package-lock.json
 **/node_modules
 **/package-lock.json
 
+n8n
 n8n/audio
 n8n/output
 .DS_Store

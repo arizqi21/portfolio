@@ -1,0 +1,5 @@
+{
+  "addToCartItem1": "(//button[contains(@data-test,'add-to-cart')])[1]",
+  "addToCartItem2": "(//button[contains(@data-test,'add-to-cart')])[2]",
+  "shoppingCartLink": "//a[@data-test='shopping-cart-link']"
+}
